@@ -26,12 +26,12 @@ async def run_bot(message: types.Message):
 
 @dp.message_handler(commands="restart_gpt_functions")
 async def restart_gpt_functions(message: types.Message):
-    subprocess.Popen("systemctl restart gpt_processing_functions.service")
+    subprocess.Popen("systemctl restart gpt_processing_functions.service", shell=True)
     await message.answer("Перезапустили программу для поиска функций")
 
 @dp.message_handler(commands="restart_gpt_description")
 async def restart_gpt_description(message: types.Message):
-    subprocess.Popen("systemctl restart gpt_processing_description.service")
+    subprocess.Popen("systemctl restart gpt_processing_description.service", shell=True)
     await message.answer("Перезапустили программу для поиска описаний")
 
 

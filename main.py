@@ -41,7 +41,7 @@ async def restart_gpt_description(message: types.Message):
 
 @dp.message_handler(commands="status_gpt_functions")
 async def get_status_gpt_functions(message: types.Message):
-    subprocess.Popen("systemctl restart gpt_processing_functions.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_functions.service > status_info.txt", shell=True)
 
     data = status.parse_status_info()
     await message.answer("\n".join([
@@ -53,7 +53,7 @@ async def get_status_gpt_functions(message: types.Message):
 
 @dp.message_handler(commands="status_gpt_description")
 async def get_status_gpt_description(message: types.Message):
-    subprocess.Popen("systemctl restart gpt_processing_description.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_description.service > status_info.txt", shell=True)
 
     data = status.parse_status_info()
     

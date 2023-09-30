@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import subprocess
 import status
+from time import sleep
 
 
 enviroment = load_dotenv(".env")
@@ -42,6 +43,7 @@ async def restart_gpt_description(message: types.Message):
 @dp.message_handler(commands="status_gpt_functions")
 async def get_status_gpt_functions(message: types.Message):
     subprocess.Popen("systemctl status gpt_processing_functions.service > status_info.txt", shell=True)
+    sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()
     await message.answer("\n".join([
@@ -54,6 +56,7 @@ async def get_status_gpt_functions(message: types.Message):
 @dp.message_handler(commands="status_gpt_description")
 async def get_status_gpt_description(message: types.Message):
     subprocess.Popen("systemctl status gpt_processing_description.service > status_info.txt", shell=True)
+    sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()
     

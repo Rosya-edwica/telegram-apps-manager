@@ -1,6 +1,11 @@
 from typing import NamedTuple
 import re
 
+
+SUCCESS_EMOJI = '✅'
+ERROR_EMOJI = '❌'
+DIED_EMOJI = '☠️'
+
 class ActiveStatus(NamedTuple):
     Status: str
     StartTime: str
@@ -23,9 +28,16 @@ def parse_status_info() -> Status:
 
 def parse_active_status(text: str) -> ActiveStatus:
     active_line = re.findall("Active:.*", text)[0]
+    status = re.sub(":|since", "", re.findall(":.*since", active_line)[0]).strip()
+    if "failed" in status:
+        status = f"{ERROR_EMOJI} {status}"
+    elif "running" in status:
+        status = f"{SUCCESS_EMOJI} {status}"
+    elif "inactive" in status:
+        status = f"{DIED_EMOJI} {status}"
     return ActiveStatus(
         StartTime=re.sub(";", "", re.findall(";.*", active_line)[0]).strip(),
-        Status=re.sub(":|since", "", re.findall(":.*since", active_line)[0]).strip(),
+        Status=status,
         Date=re.sub("since", "", re.findall("since.*MSK", active_line)[0]),
     )
 

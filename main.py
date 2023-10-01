@@ -71,7 +71,7 @@ async def openedu_status(query: types.CallbackQuery):
 @dp.callback_query_handler(text="openedu_upload_btn")
 async def openedu_upload_result(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    file = open("~/parsers/py-openedu-scraper/courses.csv", "rb")
+    file = open("/root/parsers/py-openedu-scraper/courses.csv", "rb")
     await bot.send_document(chat_id=query.from_user.id, document=file)
     file.close()
 

@@ -123,7 +123,7 @@ async def gpt_positions_description(query: types.CallbackQuery):
 @dp.callback_query_handler(text="gpt_positions_functions_status_btn")
 async def gpt_positions_functions_status(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    # subprocess.Popen("systemctl status gpt_processing_functions.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_functions.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()
@@ -139,7 +139,7 @@ async def gpt_positions_functions_status(query: types.CallbackQuery):
 @dp.callback_query_handler(text="gpt_positions_description_status_btn")
 async def gpt_positions_description_status(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    # subprocess.Popen("systemctl status gpt_processing_description.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_description.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()

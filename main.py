@@ -40,6 +40,28 @@ async def vacancies(query: types.CallbackQuery):
     await bot.send_message(chat_id=query.from_user.id, text="Выбери платформу", reply_markup=markups.get_vacancies_menu())
 
 
+@dp.callback_query_handler(text="vacancies_status_btn")
+async def vacancies_status(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    subprocess.Popen("systemctl status go_vacancies.service > status_info.txt", shell=True)
+    sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
+
+    data = status.parse_status_info()
+    await bot.send_message(
+        chat_id=query.from_user.id, 
+        text="\n".join([
+            f"Статус выполнения: {data.ActiveStatus.Status}",
+            f"Дата запуска: {data.ActiveStatus.Date}",
+            f"Время запуска: {data.ActiveStatus.StartTime}\n",
+            f"Последние логи:\n",
+        ] + data.Logs))
+    
+@dp.callback_query_handler(text="vacancies_stop_btn")
+async def vacancies_stop(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    subprocess.Popen("systemctl stop go_vacancies.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Остановили парсер")    
+
 @dp.callback_query_handler(text="headhunter_btn")
 async def vacancies_headhunter(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 

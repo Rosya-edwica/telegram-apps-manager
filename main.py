@@ -135,7 +135,20 @@ async def gpt_positions_functions_status(query: types.CallbackQuery):
             f"Время запуска: {data.ActiveStatus.StartTime}\n",
             f"Последние логи:\n",
         ] + data.Logs))
-    
+
+@dp.callback_query_handler(text="gpt_positions_functions_run_btn")
+async def gpt_positions_functions_run(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+    subprocess.Popen("systemctl restart gpt_processing_functions.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу для поиска функций")
+
+
+@dp.callback_query_handler(text="gpt_positions_description_run_btn")
+async def gpt_positions_description_run(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
+    subprocess.Popen("systemctl restart gpt_processing_description.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу для поиска описаний")
+
 @dp.callback_query_handler(text="gpt_positions_description_status_btn")
 async def gpt_positions_description_status(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)

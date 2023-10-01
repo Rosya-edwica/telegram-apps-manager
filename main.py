@@ -40,6 +40,58 @@ async def vacancies(query: types.CallbackQuery):
     await bot.send_message(chat_id=query.from_user.id, text="Выбери платформу", reply_markup=markups.get_vacancies_menu())
 
 
+@dp.callback_query_handler(text="headhunter_btn")
+async def vacancies_headhunter(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    change_platform_for_vacancies_by_systemd("headhunter")
+    subprocess.Popen("systemctl daemon-reload", shell=True)
+    subprocess.Popen("systemctl restart go_vacancies.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Запустили парсер Headhunter")
+
+@dp.callback_query_handler(text="superjob_btn")
+async def vacancies_superjob(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    change_platform_for_vacancies_by_systemd("superjob")
+    subprocess.Popen("systemctl daemon-reload", shell=True)
+    subprocess.Popen("systemctl restart go_vacancies.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Запустили парсер SuperJob")
+
+@dp.callback_query_handler(text="trudvsem_btn")
+async def vacancies_trudvsem(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    change_platform_for_vacancies_by_systemd("trudvsem")
+    subprocess.Popen("systemctl daemon-reload", shell=True)
+    subprocess.Popen("systemctl restart go_vacancies.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Запустили парсер Работа России")
+
+
+@dp.callback_query_handler(text="geekjob_btn")
+async def vacancies_geekjob(query: types.CallbackQuery):
+    await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id) 
+    change_platform_for_vacancies_by_systemd("geekjob")
+    subprocess.Popen("systemctl daemon-reload", shell=True)
+    subprocess.Popen("systemctl restart go_vacancies.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Запустили парсер GeekJob")
+
+
+
+def change_platform_for_vacancies_by_systemd(platform: str):
+    systemd_config = f"""
+    [Unit]
+    Description=App for collection vacancies from {platform}
+    After=network.target
+
+    [Service]
+    User=root
+    Group=root
+
+    WorkingDirectory=/root/go/src/github.com/Rosya-edwica/vacancies
+    ExecStart=/root/go/src/github.com/Rosya-edwica/vacancies/cmd/scraper {platform}
+    """
+    subprocess.Popen(f"echo '{systemd_config}' > /etc/systemd/system/go_vacancies.service", shell=True)
+
+
+
 # OPENEDU
 @dp.callback_query_handler(text="openedu_menu")
 async def openedu(query: types.CallbackQuery):

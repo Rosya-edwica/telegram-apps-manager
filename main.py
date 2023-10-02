@@ -229,10 +229,10 @@ async def gpt_skills(query: types.CallbackQuery):
     await bot.send_message(chat_id=query.from_user.id, text="Выбери действие", reply_markup=markups.get_gpt_skills_menu())
 
 
-@dp.callback_query_handler(text="gpt_position_functions_menu")
-async def gpt_positions_functions(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_position_1_menu")
+async def gpt_positions_1(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    await bot.send_message(chat_id=query.from_user.id, text="Подбор описаний профессий: Выбери действие", reply_markup=markups.get_gpt_positions_functions_menu())
+    await bot.send_message(chat_id=query.from_user.id, text="Подбор описаний профессий: Выбери действие", reply_markup=markups.get_gpt_positions_1_menu())
 
 @dp.callback_query_handler(text="gpt_position_description_menu")
 async def gpt_positions_description(query: types.CallbackQuery):
@@ -240,10 +240,10 @@ async def gpt_positions_description(query: types.CallbackQuery):
     await bot.send_message(chat_id=query.from_user.id, text="Подбор функций профессий: Выбери действие", reply_markup=markups.get_gpt_positions_description_menu())
 
 
-@dp.callback_query_handler(text="gpt_positions_functions_status_btn")
-async def gpt_positions_functions_status(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_positions_1_status_btn")
+async def gpt_positions_1_status(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    subprocess.Popen("systemctl status gpt_processing_functions.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_1.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()
@@ -256,11 +256,11 @@ async def gpt_positions_functions_status(query: types.CallbackQuery):
             f"Последние логи:\n",
         ] + data.Logs))
 
-@dp.callback_query_handler(text="gpt_positions_functions_run_btn")
-async def gpt_positions_functions_run(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_positions_1_run_btn")
+async def gpt_positions_1_run(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    subprocess.Popen("systemctl restart gpt_processing_functions.service", shell=True)
-    await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу для поиска функций")
+    subprocess.Popen("systemctl restart gpt_processing_1.service", shell=True)
+    await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу GPT-1")
 
 
 @dp.callback_query_handler(text="gpt_positions_description_run_btn")

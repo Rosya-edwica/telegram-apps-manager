@@ -6,7 +6,7 @@ def get_gpt_positions_menu() -> InlineKeyboardMarkup:
 
     short_descr_btn = InlineKeyboardButton(text="Краткое описание", callback_data="gpt_position_short_descr_menu")
     descr_btn = InlineKeyboardButton(text="Подробное описание", callback_data="gpt_position_description_menu")
-    functions_btn = InlineKeyboardButton(text="Функции", callback_data="gpt_position_1_menu")
+    functions_btn = InlineKeyboardButton(text="Образование", callback_data="gpt_position_1_menu")
     other_names_btn = InlineKeyboardButton(text="Другие наименования", callback_data="gpt_position_other_names_menu")
     work_places_btn = InlineKeyboardButton(text="Рабочие места", callback_data="gpt_position_work_places_menu")
     levels_btn = InlineKeyboardButton(text="Уровни", callback_data="gpt_position_levels_menu")

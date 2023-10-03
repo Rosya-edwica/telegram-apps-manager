@@ -1,6 +1,6 @@
 from typing import NamedTuple
 import re
-
+import subprocess
 
 SUCCESS_EMOJI = '✅'
 ERROR_EMOJI = '❌'
@@ -44,3 +44,21 @@ def parse_active_status(text: str) -> ActiveStatus:
 def parse_logs(text: str) -> list[str]:
     logs = re.findall("\w+ \d+ .*", text)
     return [i + "\n" for i in logs]
+
+
+def update_systemd_gpt_config(action: str):
+    config = f"""
+        [Unit]
+        Description=(GPT-processing 2) App for processing positions by GPT for {action}
+        After=network.target
+
+        [Service]
+        User=root
+        Group=root
+        WorkingDirectory=/root/go-gpt-processing_copy/
+        ExecStart=/root/go-gpt-processing_copy/cmd/gpt_processing_2 {action}
+
+        [Install]
+        WantedBy=multi-user.target
+    """
+    subprocess.Popen(f"echo '{config}' > /etc/systemd/system/gpt_processing_1.service", shell=True)

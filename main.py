@@ -223,6 +223,27 @@ async def gpt_positions(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
     await bot.send_message(chat_id=query.from_user.id, text="Выбери действие", reply_markup=markups.get_gpt_positions_menu())
 
+@dp.callback_query_handler(text_contains="gpt_position_btn_")
+async def gpt_position_buttons(query: types.CallbackQuery):
+    match query.data:
+        case "gpt_position_btn_functions":
+            status.update_systemd_gpt_config(action="functions")
+        case "gpt_position_btn_about":
+            status.update_systemd_gpt_config(action="about")
+        case "gpt_position_btn_descr":
+            status.update_systemd_gpt_config(action="description")
+        case "gpt_position_btn_other_names":
+            status.update_systemd_gpt_config(action="other_names")
+        case "gpt_position_btn_education":
+            status.update_systemd_gpt_config(action="education")
+        case "gpt_position_btn_levels":
+            status.update_systemd_gpt_config(action="levels")
+        case "gpt_position_btn_work_places":
+            status.update_systemd_gpt_config(action="work_places")
+    await bot.send_message(chat_id=query.from_user.id, text="Выбери действие", reply_markup=markups.get_gpt_positions_2_menu())
+
+    
+
 @dp.callback_query_handler(text="gpt_skills_menu")
 async def gpt_skills(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
@@ -234,10 +255,10 @@ async def gpt_positions_1(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
     await bot.send_message(chat_id=query.from_user.id, text="Подбор описаний профессий: Выбери действие", reply_markup=markups.get_gpt_positions_1_menu())
 
-@dp.callback_query_handler(text="gpt_position_description_menu")
-async def gpt_positions_description(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_position_2_menu")
+async def gpt_positions_2(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    await bot.send_message(chat_id=query.from_user.id, text="Подбор функций профессий: Выбери действие", reply_markup=markups.get_gpt_positions_description_menu())
+    await bot.send_message(chat_id=query.from_user.id, text="Подбор функций профессий: Выбери действие", reply_markup=markups.get_gpt_positions_2_menu())
 
 
 @dp.callback_query_handler(text="gpt_positions_1_status_btn")
@@ -263,16 +284,16 @@ async def gpt_positions_1_run(query: types.CallbackQuery):
     await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу GPT-1")
 
 
-@dp.callback_query_handler(text="gpt_positions_description_run_btn")
-async def gpt_positions_description_run(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_positions_2_run_btn")
+async def gpt_positions_2_run(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    subprocess.Popen("systemctl restart gpt_processing_description.service", shell=True)
+    subprocess.Popen("systemctl restart gpt_processing_2.service", shell=True)
     await bot.send_message(chat_id=query.from_user.id, text="Перезапустили программу для поиска описаний")
 
-@dp.callback_query_handler(text="gpt_positions_description_status_btn")
-async def gpt_positions_description_status(query: types.CallbackQuery):
+@dp.callback_query_handler(text="gpt_positions_2_status_btn")
+async def gpt_positions_2_status(query: types.CallbackQuery):
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
-    subprocess.Popen("systemctl status gpt_processing_description.service > status_info.txt", shell=True)
+    subprocess.Popen("systemctl status gpt_processing_2.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
     data = status.parse_status_info()

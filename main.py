@@ -267,15 +267,11 @@ async def gpt_positions_1_status(query: types.CallbackQuery):
     subprocess.Popen("systemctl status gpt_processing_1.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
-    data = status.parse_status_info()
-    await bot.send_message(
-        chat_id=query.from_user.id, 
-        text="\n".join([
-            f"Статус выполнения: {data.ActiveStatus.Status}",
-            f"Дата запуска: {data.ActiveStatus.Date}",
-            f"Время запуска: {data.ActiveStatus.StartTime}\n",
-            f"Последние логи:\n",
-        ] + data.Logs))
+    status_data = status.parse_status_info()
+    if status_data is None:
+        await bot.send_message(chat_id=query.from_user.id, text="Не получается прочитать логи, скорее всего их еще нет")
+    else: 
+        await bot.send_message(chat_id=query.from_user.id, text=status_data)
 
 @dp.callback_query_handler(text="gpt_positions_1_run_btn")
 async def gpt_positions_1_run(query: types.CallbackQuery):
@@ -296,15 +292,11 @@ async def gpt_positions_2_status(query: types.CallbackQuery):
     subprocess.Popen("systemctl status gpt_processing_2.service > status_info.txt", shell=True)
     sleep(1) # Чтобы убедиться в том, что информация успела записаться в файл перед чтением
 
-    data = status.parse_status_info()
-    await bot.send_message(
-        chat_id=query.from_user.id, 
-        text="\n".join([
-            f"Статус выполнения: {data.ActiveStatus.Status}",
-            f"Дата запуска: {data.ActiveStatus.Date}",
-            f"Время запуска: {data.ActiveStatus.StartTime}\n",
-            f"Последние логи:\n",
-        ] + data.Logs))
+    status_data = status.parse_status_info()
+    if status_data is None:
+        await bot.send_message(chat_id=query.from_user.id, text="Не получается прочитать логи, скорее всего их еще нет")
+    else: 
+        await bot.send_message(chat_id=query.from_user.id, text=status_data)
     
 if __name__ == "__main__":
 

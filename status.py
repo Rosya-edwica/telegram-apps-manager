@@ -16,14 +16,22 @@ class Status(NamedTuple):
     Logs: list[str]
 
 
-def parse_status_info() -> Status:
+def parse_status_info() -> str:
     with open("status_info.txt", "r", encoding="utf-8") as f:
         text = f.read()
-    
-    return Status(
-        ActiveStatus=parse_active_status(text),
-        Logs=parse_logs(text)
-    )
+    try:
+        status =  Status(
+            ActiveStatus=parse_active_status(text),
+            Logs=parse_logs(text)
+        )
+        return "\n".join([
+            f"Статус выполнения: {status.ActiveStatus.Status}",
+            f"Дата запуска: {status.ActiveStatus.Date}",
+            f"Время запуска: {status.ActiveStatus.StartTime}\n",
+            f"Последние логи:\n",
+        ] + status.Logs)
+    except:
+        return None
 
 
 def parse_active_status(text: str) -> ActiveStatus:
@@ -61,4 +69,6 @@ def update_systemd_gpt_config(action: str):
         [Install]
         WantedBy=multi-user.target
     """
-    subprocess.Popen(f"echo '{config}' > /etc/systemd/system/gpt_processing_1.service", shell=True)
+    subprocess.Popen(f"echo '{config}' > /etc/systemd/system/gpt_processing_2.service", shell=True)
+    # subprocess.Popen("systemctl restart /etc/systemd/system/gpt_processing_1", shell=True)
+    subprocess.Popen("systemctl daemon-reload", shell=True)

@@ -161,3 +161,4 @@ cython_debug/
 status_info.txt
 *.xlsx
 *.csv
+config.toml

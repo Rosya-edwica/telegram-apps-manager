@@ -1,5 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from markups.menu import get_status_menu
+from bot.markups.menu import get_status_menu
 
 
 POSITION_BUTTONS = (

@@ -1,3 +1,6 @@
 aiogram==2.23.1
 python-dotenv
 apscheduler
+loguru
+aiomysql
+toml
